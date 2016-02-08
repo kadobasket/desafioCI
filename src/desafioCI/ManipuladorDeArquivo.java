@@ -3,9 +3,9 @@ package desafioCI;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 public class ManipuladorDeArquivo {
 	
@@ -15,46 +15,42 @@ public class ManipuladorDeArquivo {
 		FileReader arq = new FileReader(path);
 		BufferedReader buffRead = new BufferedReader(arq);
 		String linha = ""; 
-		String nome = null;
-		double valor;
-		int unidade;
+		double valorNovo;
+		int unidadeNovo;
+		double totalFinal = 0;
 		
-		HashMap<String, Fruta> frutas = new HashMap<String, Fruta>();  
 		
-		while (true) {
-			if ((linha = buffRead.readLine()) != null) {
+		
+		TreeMap<String, Fruta> frutas = new TreeMap<String, Fruta>();  
+		
+		
+			while ((linha = buffRead.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(linha, ";");
-				nome = st.nextToken();
-				valor = Double.parseDouble(st.nextToken());
-				unidade = Integer.parseInt(st.nextToken());
+				String nome = st.nextToken();
+				double valor = Double.parseDouble(st.nextToken());
+				int unidade = Integer.parseInt(st.nextToken());
 				
-				Fruta fruta = new Fruta(nome,valor,unidade);
 				
-				Set<String> chaves = frutas.keySet();
-				for (String chave : chaves)
-				{
-					if(chave != null)
-						System.out.println(chave);
-				}
-				
-				if(frutas.containsKey(fruta.getNome())){
-					System.out.println(frutas.values().toString());
-					System.out.println("Objeto " + fruta.getNome() + " ja existe");
+				if(frutas.containsKey(nome) ==  true){	
+					  Fruta frutaEscolhida = frutas.get(nome);
+					  unidadeNovo = unidade + frutaEscolhida.getUnidade();
+					  valorNovo = ((unidade * valor) + frutaEscolhida.getValor());
+					  frutas.put(nome, new Fruta(nome, valorNovo, unidadeNovo));
+					  
 				}else{
-					frutas.put(fruta.getNome(), fruta);
-					
-					System.out.println("Nome: " + fruta.getNome()  + " / " + "Valor: R$ " + fruta.getValor() + " / " + "Unidades: " + fruta.getUnidade());
-					
+					valorNovo = valor * unidade;
+					frutas.put(nome,new Fruta(nome, valorNovo, unidade));
 				}
-				
-				
-				
-				
-				
-			} else 
-				break;
-		} 
-		
+			}
+			
+			
+			for(Entry<String, Fruta> mapaFrutas : frutas.entrySet()){  
+			    String nome = mapaFrutas.getKey();
+			    nome = Character.toUpperCase(nome.charAt(0)) + nome.substring(1);
+				System.out.printf("%s - %s un. -  R$ %.2f  \n", nome, mapaFrutas.getValue().getUnidade(),mapaFrutas.getValue().getValor());  
+			      totalFinal = totalFinal + mapaFrutas.getValue().getValor();
+			   }  
+				System.out.printf("Total - R$ %.2f ", totalFinal);
 		buffRead.close(); 
 	}
 
