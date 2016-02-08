@@ -1,7 +1,7 @@
 package desafioCI;
 
 
-public class Fruta implements Comparable<Fruta>{
+public class Fruta{
 	
 	private String nome;
 	private int unidade;
@@ -38,18 +38,7 @@ public class Fruta implements Comparable<Fruta>{
 		this.valor = valor;
 	}
 
-	@Override
-	public int compareTo(Fruta outraFruta) {
-		if( this.getNome() == null && outraFruta.getNome() != null){ 
-			return 1; 
-		}else if( this.getNome() != null && outraFruta.getNome() == null ){
-			return -1;
-		}else if(this.getNome() == null && outraFruta.getNome() == null) { 
-			return 0;
-		}else {
-			return this.getNome().compareTo(outraFruta.getNome());
-		}
-	}
+
 	
 	
 	
